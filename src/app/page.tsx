@@ -12,6 +12,7 @@ import { AccountingModule } from "./components/Accounting/AccountingModule";
 import { AnalysisModule } from "./components/Analysis/AnalysisModule";
 import { ReportsModule } from "./components/Reports/ReportsModule";
 import type { JournalEntryType } from "@/app/types/accounting";
+import { AIAdvisorModule } from "./components/AI/AIAdvisorModule";
 
 const { Header, Sider, Content } = Layout;
 
@@ -198,7 +199,7 @@ export default function Home() {
                 defaultActiveKey={getInitialReportTab()}
               />
             )}
-            {selectedKey === "4" && <div>AI分析建议模块</div>}
+            {selectedKey === "4" && <AIAdvisorModule entries={allEntries} />}
           </Content>
         </Layout>
       </Layout>
