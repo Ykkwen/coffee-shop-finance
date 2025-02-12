@@ -515,7 +515,7 @@ export const AccountVerification = ({
     {
       title: "操作",
       key: "action",
-      render: (_, record: VerificationResult) => (
+      render: (_: unknown, record: VerificationResult) => (
         <Space>
           <Button
             type="primary"
