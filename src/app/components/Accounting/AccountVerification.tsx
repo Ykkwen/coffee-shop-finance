@@ -27,6 +27,7 @@ import {
   WarningOutlined,
   AuditOutlined,
   EyeOutlined,
+  RobotOutlined,
 } from "@ant-design/icons";
 import type { JournalEntryType } from "@/app/types/accounting";
 import { message } from "antd";
@@ -304,6 +305,35 @@ const mockVerificationData: VerificationResult[] = [
   },
 ];
 
+// 添加 AI 标识组件
+const AIBadge = ({ children }: { children: React.ReactNode }) => (
+  <div
+    style={{
+      position: "relative",
+      display: "inline-flex",
+      alignItems: "center",
+      gap: "8px",
+    }}
+  >
+    <div
+      style={{
+        background: "linear-gradient(45deg, #1677ff, #4096ff)",
+        padding: "2px 8px",
+        borderRadius: "4px",
+        color: "white",
+        fontSize: "12px",
+        display: "flex",
+        alignItems: "center",
+        gap: "4px",
+      }}
+    >
+      <RobotOutlined />
+      AI
+    </div>
+    {children}
+  </div>
+);
+
 export const AccountVerification = ({
   entries,
   onVerificationComplete,
@@ -428,33 +458,42 @@ export const AccountVerification = ({
       key: "creditAmount",
     },
     {
-      title: "AI 风险评估",
+      title: <AIBadge>风险评估</AIBadge>,
       key: "aiRisk",
       render: (_: any, record: VerificationResult) => {
         const analysis = record.aiAnalysis;
         if (!analysis) return <Tag color="default">未分析</Tag>;
 
         return (
-          <Space>
-            <Tag
-              color={
-                analysis.riskLevel === "high"
-                  ? "red"
+          <div
+            style={{
+              background: "rgba(22, 119, 255, 0.05)",
+              padding: "8px",
+              borderRadius: "6px",
+              border: "1px solid rgba(22, 119, 255, 0.1)",
+            }}
+          >
+            <Space>
+              <Tag
+                color={
+                  analysis.riskLevel === "high"
+                    ? "red"
+                    : analysis.riskLevel === "medium"
+                    ? "orange"
+                    : "green"
+                }
+              >
+                {analysis.riskLevel === "high"
+                  ? "高风险"
                   : analysis.riskLevel === "medium"
-                  ? "orange"
-                  : "green"
-              }
-            >
-              {analysis.riskLevel === "high"
-                ? "高风险"
-                : analysis.riskLevel === "medium"
-                ? "中风险"
-                : "低风险"}
-            </Tag>
-            <span style={{ fontSize: "12px", color: "#999" }}>
-              {Math.round(analysis.confidence * 100)}% 置信度
-            </span>
-          </Space>
+                  ? "中风险"
+                  : "低风险"}
+              </Tag>
+              <span style={{ fontSize: "12px", color: "#999" }}>
+                {Math.round(analysis.confidence * 100)}% 置信度
+              </span>
+            </Space>
+          </div>
         );
       },
     },
@@ -585,7 +624,7 @@ export const AccountVerification = ({
       });
   };
 
-  // 在展开行中添加 AI 分析结果的渲染
+  // 修改 AI 分析结果卡片的渲染
   const renderAIAnalysis = (record: VerificationResult) => {
     const analysis = record.aiAnalysis;
     if (!analysis) return null;
@@ -593,45 +632,84 @@ export const AccountVerification = ({
     return (
       <Card
         type="inner"
-        title={
-          <Space>
-            <span>AI 智能分析</span>
-            <Tag
-              color={
-                analysis.riskLevel === "high"
-                  ? "red"
-                  : analysis.riskLevel === "medium"
-                  ? "orange"
-                  : "green"
-              }
-            >
-              {analysis.riskLevel === "high"
-                ? "高风险"
-                : analysis.riskLevel === "medium"
-                ? "中风险"
-                : "低风险"}{" "}
-              ({Math.round(analysis.confidence * 100)}% 置信度)
-            </Tag>
-          </Space>
-        }
-        style={{ marginTop: 16 }}
+        title={<AIBadge>智能分析</AIBadge>}
+        style={{
+          marginTop: 16,
+          background:
+            "linear-gradient(to right, rgba(22, 119, 255, 0.05), transparent)",
+          border: "1px solid rgba(22, 119, 255, 0.1)",
+        }}
+        headStyle={{
+          borderBottom: "1px solid rgba(22, 119, 255, 0.1)",
+        }}
       >
         <div>
           <div style={{ marginBottom: 16 }}>
-            <Typography.Title level={5}>AI 建议</Typography.Title>
-            <ul>
+            <div
+              style={{
+                background: "rgba(22, 119, 255, 0.1)",
+                padding: "12px",
+                borderRadius: "8px",
+                marginBottom: "16px",
+              }}
+            >
+              <Space align="center">
+                <RobotOutlined style={{ fontSize: "24px", color: "#1677ff" }} />
+                <Tag
+                  color={
+                    analysis.riskLevel === "high"
+                      ? "red"
+                      : analysis.riskLevel === "medium"
+                      ? "orange"
+                      : "green"
+                  }
+                  style={{ margin: 0 }}
+                >
+                  {analysis.riskLevel === "high"
+                    ? "高风险"
+                    : analysis.riskLevel === "medium"
+                    ? "中风险"
+                    : "低风险"}
+                </Tag>
+                <span style={{ fontSize: "14px", color: "#666" }}>
+                  置信度：{Math.round(analysis.confidence * 100)}%
+                </span>
+              </Space>
+            </div>
+
+            <Typography.Title level={5}>
+              <AIBadge>建议</AIBadge>
+            </Typography.Title>
+            <ul
+              style={{
+                background: "rgba(22, 119, 255, 0.02)",
+                padding: "16px 32px",
+                borderRadius: "8px",
+                border: "1px dashed rgba(22, 119, 255, 0.2)",
+              }}
+            >
               {analysis.suggestions.map((suggestion, index) => (
-                <li key={index}>{suggestion}</li>
+                <li key={index} style={{ color: "#666" }}>
+                  {suggestion}
+                </li>
               ))}
             </ul>
           </div>
 
           {analysis.similarCases && (
             <div>
-              <Typography.Title level={5}>相似案例</Typography.Title>
+              <Typography.Title level={5}>
+                <AIBadge>相似案例</AIBadge>
+              </Typography.Title>
               <List
                 size="small"
                 dataSource={analysis.similarCases}
+                style={{
+                  background: "rgba(22, 119, 255, 0.02)",
+                  padding: "8px 16px",
+                  borderRadius: "8px",
+                  border: "1px dashed rgba(22, 119, 255, 0.2)",
+                }}
                 renderItem={(item) => (
                   <List.Item>
                     <Space>
