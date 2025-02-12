@@ -1,5 +1,6 @@
 "use client";
 import { Tabs } from 'antd';
+import { SmartAccounting } from './SmartAccounting';
 import { JournalEntry } from './JournalEntry';
 import { AIAssistant } from './AIAssistant';
 import { LedgerView } from './LedgerView';
@@ -14,8 +15,8 @@ export const AccountingModule = ({ entries, onNewEntry }: AccountingModuleProps)
   const items = [
     {
       key: '1',
-      label: '记账助手',
-      children: <AIAssistant onNewEntry={onNewEntry} entries={entries} />,
+      label: '智能记账',
+      children: <SmartAccounting onNewEntry={onNewEntry} entries={entries} />,
     },
     {
       key: '2',
