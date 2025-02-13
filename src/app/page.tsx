@@ -5,6 +5,7 @@ import {
   BarChartOutlined,
   FileTextOutlined,
   RobotOutlined,
+  SmileOutlined,
 } from "@ant-design/icons";
 import styles from "./page.module.css";
 import { useState, useEffect } from "react";
@@ -13,6 +14,7 @@ import { AnalysisModule } from "./components/Analysis/AnalysisModule";
 import { ReportsModule } from "./components/Reports/ReportsModule";
 import type { JournalEntryType } from "@/app/types/accounting";
 import { AIAdvisorModule } from "./components/AI/AIAdvisorModule";
+import { AIChatModule } from "./components/AI/AIChatModule";
 
 const { Header, Sider, Content } = Layout;
 
@@ -146,6 +148,11 @@ export default function Home() {
       icon: <RobotOutlined />,
       label: "AI分析建议",
     },
+    {
+      key: "5",
+      icon: <SmileOutlined />,
+      label: "AI小鲸",
+    },
   ];
 
   // 根据选中的菜单项返回对应的报表类型
@@ -200,6 +207,7 @@ export default function Home() {
               />
             )}
             {selectedKey === "4" && <AIAdvisorModule entries={allEntries} />}
+            {selectedKey === "5" && <AIChatModule />}
           </Content>
         </Layout>
       </Layout>
