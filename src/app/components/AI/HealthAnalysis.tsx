@@ -1,6 +1,15 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Card, Row, Col, Statistic, Progress, Alert, List, Typography } from "antd";
+import {
+  Card,
+  Row,
+  Col,
+  Statistic,
+  Progress,
+  Alert,
+  List,
+  Typography,
+} from "antd";
 import {
   ArrowUpOutlined,
   ArrowDownOutlined,
@@ -72,7 +81,7 @@ export const HealthAnalysis = ({ entries }: HealthAnalysisProps) => {
   const getHealthScore = () => {
     if (!metrics) return 0;
     // 根据各项指标计算综合健康分数
-    return 75; // 示例分数
+    return 70; // 示例分数
   };
 
   return (
@@ -126,7 +135,8 @@ export const HealthAnalysis = ({ entries }: HealthAnalysisProps) => {
                       value={metrics.profitMargin}
                       suffix="%"
                       valueStyle={{
-                        color: metrics.profitMargin >= 20 ? "#3f8600" : "#cf1322",
+                        color:
+                          metrics.profitMargin >= 20 ? "#3f8600" : "#cf1322",
                       }}
                       prefix={
                         metrics.profitMargin >= 20 ? (
@@ -166,7 +176,9 @@ export const HealthAnalysis = ({ entries }: HealthAnalysisProps) => {
               dataSource={suggestions}
               renderItem={(item) => (
                 <List.Item>
-                  <CheckCircleOutlined style={{ marginRight: 8, color: "#52c41a" }} />
+                  <CheckCircleOutlined
+                    style={{ marginRight: 8, color: "#52c41a" }}
+                  />
                   {item}
                 </List.Item>
               )}
@@ -176,4 +188,4 @@ export const HealthAnalysis = ({ entries }: HealthAnalysisProps) => {
       </Row>
     </div>
   );
-}; 
+};
